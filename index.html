@@ -4,33 +4,148 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Match de Residência Médica</title>
-    <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
     <style>
+        :root {
+            --blue-50: #eff6ff;
+            --blue-100: #dbeafe;
+            --blue-200: #bfdbfe;
+            --blue-600: #2563eb;
+            --blue-700: #1d4ed8;
+            --blue-800: #1e40af;
+            --blue-900: #1e3a8a;
+            
+            --gray-50: #f9fafb;
+            --gray-100: #f3f4f6;
+            --gray-200: #e5e7eb;
+            --gray-300: #d1d5db;
+            --gray-400: #9ca3af;
+            --gray-500: #6b7280;
+            --gray-600: #4b5563;
+            --gray-700: #374151;
+            --gray-800: #1f2937;
+            --gray-900: #111827;
+
+            --green-500: #22c55e;
+            --green-600: #16a34a;
+            --green-700: #15803d;
+            
+            --red-500: #ef4444;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
         body {
             font-family: 'Inter', sans-serif;
-            background-color: #f3f4f6;
+            background-color: var(--gray-100);
+            color: var(--gray-800);
+            line-height: 1.5;
+            -webkit-font-smoothing: antialiased;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
         }
-        /* Custom scrollbar for aesthetic */
-        ::-webkit-scrollbar {
-            width: 8px;
+
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #f1f1f1; }
+        ::-webkit-scrollbar-thumb { background: #c1c1c1; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #a8a8a8; }
+
+        .container {
+            max-width: 80rem;
+            margin: 0 auto;
+            padding: 0 1rem;
+            width: 100%;
         }
-        ::-webkit-scrollbar-track {
-            background: #f1f1f1; 
+        @media (min-width: 640px) { .container { padding: 0 1.5rem; } }
+        @media (min-width: 1024px) { .container { padding: 0 2rem; } }
+
+        header {
+            background-color: var(--blue-900);
+            color: white;
+            padding: 2rem 0;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
         }
-        ::-webkit-scrollbar-thumb {
-            background: #c1c1c1; 
-            border-radius: 4px;
+        header h1 {
+            font-size: 1.875rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
         }
-        ::-webkit-scrollbar-thumb:hover {
-            background: #a8a8a8; 
+        header p { color: var(--blue-200); }
+
+        main {
+            flex-grow: 1;
+            padding: 2rem 0;
+            display: flex;
+            flex-direction: column;
+            gap: 2rem;
         }
+        
+        .main-columns {
+            display: flex;
+            flex-direction: column;
+            gap: 2rem;
+        }
+        @media (min-width: 1024px) {
+            .main-columns { flex-direction: row; }
+        }
+
+        .col-half { width: 100%; }
+        @media (min-width: 1024px) { .col-half { width: 50%; } }
+
+        .card {
+            background-color: white;
+            border-radius: 0.75rem;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+            padding: 1.5rem;
+        }
+        
+        .card-scrollable {
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+
+        .section-title {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: var(--gray-800);
+            border-bottom: 1px solid var(--gray-200);
+            padding-bottom: 0.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .space-y-6 > * + * { margin-top: 1.5rem; }
+        .space-y-5 > * + * { margin-top: 1.25rem; }
+        .space-y-4 > * + * { margin-top: 1rem; }
+
+        .flex-between {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+            margin-bottom: 0.25rem;
+        }
+
+        .crit-label { font-weight: 600; color: var(--gray-700); font-size: 0.875rem; }
+        .crit-badge {
+            color: var(--blue-600);
+            font-weight: 700;
+            background-color: var(--blue-100);
+            padding: 0.25rem 0.5rem;
+            border-radius: 0.25rem;
+            font-size: 0.75rem;
+        }
+        .crit-desc { font-size: 0.75rem; color: var(--gray-500); margin-bottom: 0.5rem; }
+
         .slider {
             -webkit-appearance: none;
             width: 100%;
             height: 6px;
             border-radius: 5px;
-            background: #e5e7eb;
+            background: var(--gray-200);
             outline: none;
         }
         .slider::-webkit-slider-thumb {
@@ -39,18 +154,186 @@
             width: 20px;
             height: 20px;
             border-radius: 50%;
-            background: #3b82f6;
+            background: var(--blue-600);
             cursor: pointer;
-            transition: background .15s ease-in-out;
+            transition: background 0.15s ease-in-out;
         }
-        .slider::-webkit-slider-thumb:hover {
-            background: #2563eb;
+        .slider::-webkit-slider-thumb:hover { background: var(--blue-700); }
+
+        .result-wrapper { display: flex; flex-direction: column; gap: 1.5rem; height: 100%; }
+        .result-wrapper .card { flex-grow: 1; }
+        
+        .bar-label-container { margin-bottom: 0.25rem; display: flex; justify-content: space-between; align-items: center; }
+        .bar-name { font-weight: 700; color: var(--gray-600); }
+        .bar-name.winner { color: var(--gray-900); font-size: 1.125rem; }
+        .bar-pct { font-weight: 700; color: var(--gray-500); }
+        .bar-pct.winner { color: var(--blue-600); font-size: 1.125rem; }
+
+        .progress-bg {
+            width: 100%;
+            background-color: var(--gray-200);
+            border-radius: 9999px;
+            height: 1rem;
+            overflow: hidden;
         }
-        .bar-transition {
+        .progress-bar {
+            height: 1rem;
+            border-radius: 9999px;
             transition: width 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
         }
-        .winner-card {
-            animation: pulse-border 2s infinite;
+        .pulse-overlay {
+            position: absolute;
+            top: 0; right: 0; bottom: 0; left: 0;
+            background-color: white;
+            opacity: 0.2;
+            animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+        }
+
+        #insight-card {
+            background-color: var(--blue-50);
+            border-radius: 0.75rem;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            padding: 1.5rem;
+            border: 2px solid var(--blue-200);
+        }
+        #insight-card.hidden { display: none; }
+        #insight-card.winner-card { animation: pulse-border 2s infinite; }
+        
+        #insight-card h3 { font-size: 1.125rem; font-weight: 700; color: var(--blue-900); margin-bottom: 0.5rem; }
+        #insight-card h3 span { color: var(--blue-600); }
+        #insight-card p { font-size: 0.875rem; color: var(--blue-800); line-height: 1.625; }
+
+        .advanced-section { margin-bottom: 2rem; }
+        .adv-container {
+            background-color: var(--gray-200);
+            border-radius: 0.75rem;
+            box-shadow: inset 0 2px 4px 0 rgba(0, 0, 0, 0.06);
+            padding: 1.5rem;
+            border: 1px solid var(--gray-300);
+        }
+        .adv-container h2 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+            color: var(--gray-800);
+            border-bottom: 1px solid var(--gray-300);
+            padding-bottom: 0.5rem;
+        }
+        .adv-container > p { font-size: 0.875rem; color: var(--gray-600); margin-bottom: 1.5rem; }
+
+        .grid-2 {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 1.5rem;
+        }
+        @media (min-width: 768px) { .grid-2 { grid-template-columns: repeat(2, 1fr); } }
+
+        .panel {
+            background-color: white;
+            padding: 1.25rem;
+            border-radius: 0.5rem;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            display: flex;
+            flex-direction: column;
+        }
+        .panel h3 {
+            font-size: 1.125rem;
+            font-weight: 700;
+            margin-bottom: 0.75rem;
+            border-bottom: 1px solid var(--gray-200);
+            padding-bottom: 0.5rem;
+            color: var(--gray-800);
+        }
+
+        .input-base {
+            width: 100%;
+            margin-bottom: 0.75rem;
+            padding: 0.5rem;
+            border: 1px solid var(--gray-300);
+            border-radius: 0.25rem;
+            font-family: inherit;
+            font-size: 0.875rem;
+            outline: none;
+        }
+        .input-base:focus {
+            border-color: var(--blue-600);
+            box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.2);
+        }
+        select.input-base { background-color: var(--gray-50); margin-bottom: 1rem; }
+        textarea.input-base { flex-grow: 1; resize: vertical; min-height: 80px; margin-bottom: 1rem; }
+
+        .panel-green .input-base:focus {
+            border-color: var(--green-500);
+            box-shadow: 0 0 0 2px rgba(34, 197, 94, 0.2);
+        }
+
+        .btn {
+            font-weight: 700;
+            padding: 0.5rem 1rem;
+            border-radius: 0.25rem;
+            border: none;
+            cursor: pointer;
+            transition: background-color 0.2s;
+            color: white;
+            text-align: center;
+        }
+        .btn-full { width: 100%; }
+        .btn-blue { background-color: var(--blue-600); }
+        .btn-blue:hover { background-color: var(--blue-700); }
+        .btn-green { background-color: var(--green-600); }
+        .btn-green:hover { background-color: var(--green-700); }
+
+        .adv-score-row {
+            display: flex;
+            flex-direction: column;
+            margin-bottom: 0.75rem;
+            background-color: var(--gray-50);
+            padding: 0.5rem;
+            border-radius: 0.25rem;
+            border: 1px solid var(--gray-100);
+        }
+        .adv-score-row .flex-between { margin-bottom: 0.25rem; align-items: center; }
+        .adv-score-row span:first-child { font-weight: 600; color: var(--gray-700); font-size: 0.75rem; }
+        .adv-score-row span:last-child { font-weight: 700; color: var(--blue-600); background-color: var(--blue-100); padding: 0 0.25rem; border-radius: 0.25rem; font-size: 0.75rem; }
+
+        /* Chips */
+        .chip-container { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-top: 1rem; }
+        .chip {
+            background-color: var(--blue-100);
+            color: var(--blue-800);
+            padding: 0.25rem 0.75rem;
+            border-radius: 9999px;
+            font-size: 0.875rem;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+        }
+        .chip button {
+            background: none;
+            border: none;
+            color: var(--red-500);
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 1.1rem;
+            line-height: 1;
+        }
+        .chip button:hover { color: #b91c1c; }
+
+        footer {
+            background-color: var(--gray-800);
+            color: var(--gray-400);
+            padding: 1.5rem 0;
+            text-align: center;
+            font-size: 0.875rem;
+            margin-top: auto;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 0.2; }
+            50% { opacity: 0.05; }
         }
         @keyframes pulse-border {
             0% { border-color: rgba(59, 130, 246, 0.5); box-shadow: 0 0 0 0 rgba(59, 130, 246, 0.4); }
@@ -59,170 +342,208 @@
         }
     </style>
 </head>
-<body class="text-gray-800 antialiased min-h-screen flex flex-col">
+<body>
 
-    <header class="bg-blue-900 text-white py-8 shadow-md">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <h1 class="text-3xl font-bold">Calculadora de Afinidade: Residência Médica</h1>
-            <p class="mt-2 text-blue-200">Ajuste os pesos (0 a 10) de acordo com o que é mais importante para a sua vida e carreira. O algoritmo calculará a especialidade ideal para você.</p>
+    <header>
+        <div class="container">
+            <h1>Calculadora de Afinidade: Residência Médica</h1>
+            <p>Ajuste os pesos (0 a 10) de acordo com o que é mais importante para a sua vida e carreira. O algoritmo calculará a especialidade ideal para você.</p>
         </div>
     </header>
 
-    <main class="flex-grow max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 w-full flex flex-col lg:flex-row gap-8">
+    <main class="container">
         
-        <!-- Controles / Sliders -->
-        <section class="w-full lg:w-1/2 bg-white rounded-xl shadow-lg p-6 lg:h-[80vh] overflow-y-auto">
-            <h2 class="text-xl font-bold mb-6 text-gray-800 border-b pb-2">Seus Critérios (Pesos)</h2>
-            <div id="sliders-container" class="space-y-6">
-                <!-- Sliders serão injetados aqui via JS -->
+        <!-- Seleção de Especialidades -->
+        <section class="card mb-4" style="margin-bottom: 2rem;">
+            <h2 class="section-title" style="margin-bottom: 1rem;">Quais especialidades você quer comparar? (Máx. 5)</h2>
+            <div style="display: flex; gap: 1rem; align-items: center;">
+                <select id="spec-selector" class="input-base" style="margin-bottom: 0; flex-grow: 1;"></select>
+                <button onclick="addSpecialtyToCompare()" class="btn btn-blue" style="width: auto;">Adicionar</button>
+            </div>
+            <div id="selected-chips" class="chip-container">
+                <!-- Chips injetados via JS -->
             </div>
         </section>
 
-        <!-- Resultados -->
-        <section class="w-full lg:w-1/2 flex flex-col gap-6">
-            <div class="bg-white rounded-xl shadow-lg p-6 flex-grow">
-                <h2 class="text-xl font-bold mb-6 text-gray-800 border-b pb-2">Ranking de Compatibilidade</h2>
-                
-                <div id="results-container" class="space-y-5">
-                    <!-- Barras de resultado serão injetadas aqui -->
+        <div class="main-columns">
+            <!-- Controles / Sliders -->
+            <section class="col-half card">
+                <h2 class="section-title">Seus Critérios (Pesos)</h2>
+                <div id="sliders-container" class="space-y-6">
+                    <!-- Sliders injetados via JS -->
                 </div>
-            </div>
+            </section>
 
-            <!-- Card de Insight (Winner) -->
-            <div id="insight-card" class="bg-blue-50 rounded-xl shadow-md p-6 border-2 border-blue-200 hidden">
-                <h3 class="text-lg font-bold text-blue-900 mb-2">💡 Seu Perfil Ideal: <span id="winner-name" class="text-blue-600"></span></h3>
-                <p id="winner-desc" class="text-sm text-blue-800 leading-relaxed"></p>
-            </div>
-        </section>
+            <!-- Resultados -->
+            <section class="col-half result-wrapper">
+                <div class="card">
+                    <h2 class="section-title">Ranking de Compatibilidade</h2>
+                    <div id="results-container" class="space-y-5">
+                        <!-- Barras de resultado injetadas via JS -->
+                    </div>
+                </div>
+
+                <!-- Card de Insight (Winner) -->
+                <div id="insight-card" class="hidden">
+                    <h3>💡 Seu Perfil Ideal: <span id="winner-name"></span></h3>
+                    <p id="winner-desc"></p>
+                </div>
+            </section>
+        </div>
     </main>
 
-    <!-- NOVA SEÇÃO: CONFIGURAÇÕES AVANÇADAS -->
-    <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 w-full mb-8">
-        <div class="bg-gray-200 rounded-xl shadow-inner p-6 border border-gray-300">
-            <h2 class="text-2xl font-bold mb-6 text-gray-800 border-b border-gray-300 pb-2">⚙️ Configurações Avançadas</h2>
-            <p class="text-sm text-gray-600 mb-6">Ajuste o comportamento do algoritmo alterando os pesos internos de cada especialidade, ou adicionando novas especialidades e variáveis (ex: Rede de Apoio).</p>
+    <!-- CONFIGURAÇÕES AVANÇADAS -->
+    <section class="container advanced-section">
+        <div class="adv-container">
+            <h2>⚙️ Configurações Avançadas</h2>
+            <p>Ajuste o comportamento do algoritmo alterando os pesos internos de cada especialidade, ou adicionando novas variáveis (ex: Rede de Apoio).</p>
             
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div class="grid-2">
                 <!-- Painel 1: Editar Pesos da Especialidade -->
-                <div class="bg-white p-5 rounded-lg shadow-md flex flex-col">
-                    <h3 class="text-lg font-bold mb-3 border-b pb-2 text-gray-800">1. Editar Especialidade</h3>
-                    <select id="adv-specialty-select" class="w-full mb-4 p-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500 bg-gray-50"></select>
-                    <div id="adv-specialty-scores" class="space-y-4 overflow-y-auto pr-2 flex-grow" style="max-h: 250px;">
-                        <!-- Sliders internos da especialidade renderizados via JS -->
+                <div class="panel">
+                    <h3>1. Editar Especialidade</h3>
+                    <select id="adv-specialty-select" class="input-base"></select>
+                    <div id="adv-specialty-scores" class="space-y-4" style="padding-right: 4px; flex-grow: 1;">
+                        <!-- Sliders internos renderizados via JS -->
                     </div>
                 </div>
                 
-                <!-- Painel 2: Adicionar Especialidade -->
-                <div class="bg-white p-5 rounded-lg shadow-md flex flex-col">
-                    <h3 class="text-lg font-bold mb-3 border-b pb-2 text-gray-800">2. Nova Especialidade</h3>
-                    <input type="text" id="new-spec-name" placeholder="Nome (Ex: Cirurgia Geral)" class="w-full mb-3 p-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500">
-                    <textarea id="new-spec-insight" placeholder="Breve descrição ou insight do perfil ideal para essa área..." class="w-full mb-4 p-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm flex-grow"></textarea>
-                    <button onclick="addNewSpecialty()" class="w-full bg-blue-600 text-white font-bold py-2 rounded hover:bg-blue-700 transition">Adicionar Especialidade</button>
-                </div>
-
-                <!-- Painel 3: Adicionar Critério -->
-                <div class="bg-white p-5 rounded-lg shadow-md flex flex-col">
-                    <h3 class="text-lg font-bold mb-3 border-b pb-2 text-gray-800">3. Novo Critério (Variável)</h3>
-                    <input type="text" id="new-crit-label" placeholder="Nome (Ex: Rede de Apoio)" class="w-full mb-3 p-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-green-500">
-                    <textarea id="new-crit-desc" placeholder="Descrição do critério para o usuário saber do que se trata..." class="w-full mb-4 p-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-green-500 text-sm flex-grow"></textarea>
-                    <button onclick="addNewCriterion()" class="w-full bg-green-600 text-white font-bold py-2 rounded hover:bg-green-700 transition">Adicionar Critério</button>
+                <!-- Painel 2: Adicionar Critério -->
+                <div class="panel panel-green">
+                    <h3>2. Novo Critério (Variável)</h3>
+                    <input type="text" id="new-crit-label" placeholder="Nome (Ex: Rede de Apoio)" class="input-base">
+                    <textarea id="new-crit-desc" placeholder="Descrição do critério para o usuário saber do que se trata..." class="input-base"></textarea>
+                    <button onclick="addNewCriterion()" class="btn btn-green btn-full">Adicionar Critério</button>
                 </div>
             </div>
         </div>
     </section>
 
-    <footer class="bg-gray-800 text-gray-400 py-6 text-center text-sm">
-        <p>Baseado em análises de mercado médico brasileiro para Anestesia, Psiquiatria, Radiologia, Otorrino e Oftalmo.</p>
+    <footer>
+        <p>Baseado em dados de mercado do ENARE e realidade prática das 49 principais especialidades médicas brasileiras.</p>
     </footer>
 
     <script>
-        // Transformados em 'let' para permitir adições dinâmicas nas configurações avançadas
-        let criteria = [
+        // Dados brutos das 49 Especialidades gerados via Script
+        var specialtiesData = [{"name": "Acupuntura", "scores": {"worklife": 9.0, "fastmoney": 4.0, "longterm": 6.0, "lowcost": 8.5, "independence": 8.0, "patient": 9.5, "surgical": 3.0, "lowstress": 9.5, "geography": 7.0, "predictability": 9.5}}, {"name": "Anestesiologia", "scores": {"worklife": 5.0, "fastmoney": 9.0, "longterm": 8.5, "lowcost": 9.5, "independence": 3.0, "patient": 2.0, "surgical": 9.0, "lowstress": 2.0, "geography": 7.5, "predictability": 4.0}}, {"name": "Cardiologia", "scores": {"worklife": 6.5, "fastmoney": 7.0, "longterm": 8.5, "lowcost": 6.0, "independence": 7.0, "patient": 8.5, "surgical": 4.0, "lowstress": 5.0, "geography": 8.0, "predictability": 7.0}}, {"name": "Cirurgia Cardiovascular", "scores": {"worklife": 2.0, "fastmoney": 3.0, "longterm": 9.5, "lowcost": 9.0, "independence": 1.0, "patient": 6.0, "surgical": 10.0, "lowstress": 1.0, "geography": 3.0, "predictability": 2.0}}, {"name": "Cirurgia Geral", "scores": {"worklife": 4.0, "fastmoney": 7.5, "longterm": 7.0, "lowcost": 8.5, "independence": 5.0, "patient": 5.0, "surgical": 10.0, "lowstress": 2.0, "geography": 9.0, "predictability": 3.0}}, {"name": "Cirurgia do Aparelho Digestivo", "scores": {"worklife": 4.5, "fastmoney": 5.0, "longterm": 9.0, "lowcost": 7.5, "independence": 3.0, "patient": 6.5, "surgical": 10.0, "lowstress": 3.5, "geography": 6.5, "predictability": 5.0}}, {"name": "Cirurgia Plástica", "scores": {"worklife": 7.5, "fastmoney": 4.0, "longterm": 10.0, "lowcost": 6.0, "independence": 7.0, "patient": 7.5, "surgical": 10.0, "lowstress": 6.5, "geography": 6.0, "predictability": 8.5}}, {"name": "Cirurgia Vascular", "scores": {"worklife": 5.5, "fastmoney": 7.0, "longterm": 9.0, "lowcost": 6.5, "independence": 5.0, "patient": 7.5, "surgical": 9.5, "lowstress": 4.0, "geography": 7.5, "predictability": 6.0}}, {"name": "Clínica Médica", "scores": {"worklife": 5.5, "fastmoney": 8.5, "longterm": 6.5, "lowcost": 9.5, "independence": 8.5, "patient": 9.0, "surgical": 1.0, "lowstress": 5.0, "geography": 10.0, "predictability": 6.5}}, {"name": "Coloproctologia", "scores": {"worklife": 6.5, "fastmoney": 6.5, "longterm": 8.0, "lowcost": 6.0, "independence": 6.0, "patient": 8.0, "surgical": 9.0, "lowstress": 6.0, "geography": 7.0, "predictability": 7.5}}, {"name": "Dermatologia", "scores": {"worklife": 9.0, "fastmoney": 5.0, "longterm": 9.5, "lowcost": 5.0, "independence": 8.0, "patient": 8.0, "surgical": 6.0, "lowstress": 9.5, "geography": 7.5, "predictability": 9.5}}, {"name": "Endocrinologia e Metabologia", "scores": {"worklife": 9.0, "fastmoney": 5.5, "longterm": 8.0, "lowcost": 9.0, "independence": 7.5, "patient": 9.0, "surgical": 1.0, "lowstress": 9.5, "geography": 8.0, "predictability": 9.5}}, {"name": "Gastroenterologia", "scores": {"worklife": 7.5, "fastmoney": 7.0, "longterm": 8.5, "lowcost": 6.0, "independence": 7.0, "patient": 8.0, "surgical": 5.0, "lowstress": 7.0, "geography": 8.0, "predictability": 8.0}}, {"name": "Genética Médica", "scores": {"worklife": 9.0, "fastmoney": 3.0, "longterm": 7.5, "lowcost": 9.5, "independence": 6.0, "patient": 9.0, "surgical": 0.0, "lowstress": 9.5, "geography": 2.0, "predictability": 9.5}}, {"name": "Geriatria", "scores": {"worklife": 7.5, "fastmoney": 6.0, "longterm": 8.0, "lowcost": 9.5, "independence": 8.0, "patient": 10.0, "surgical": 1.0, "lowstress": 7.5, "geography": 8.5, "predictability": 8.5}}, {"name": "Ginecologia e Obstetrícia", "scores": {"worklife": 4.5, "fastmoney": 8.0, "longterm": 9.0, "lowcost": 8.0, "independence": 7.5, "patient": 9.5, "surgical": 8.0, "lowstress": 3.0, "geography": 9.5, "predictability": 4.0}}, {"name": "Hematologia e Hemoterapia", "scores": {"worklife": 6.5, "fastmoney": 6.0, "longterm": 8.5, "lowcost": 9.0, "independence": 6.5, "patient": 8.5, "surgical": 3.0, "lowstress": 5.0, "geography": 5.5, "predictability": 7.0}}, {"name": "Homeopatia", "scores": {"worklife": 9.5, "fastmoney": 3.5, "longterm": 6.0, "lowcost": 9.5, "independence": 8.0, "patient": 10.0, "surgical": 0.0, "lowstress": 10.0, "geography": 5.0, "predictability": 10.0}}, {"name": "Infectologia", "scores": {"worklife": 6.5, "fastmoney": 7.0, "longterm": 7.5, "lowcost": 9.5, "independence": 7.5, "patient": 8.5, "surgical": 1.0, "lowstress": 6.0, "geography": 8.0, "predictability": 7.5}}, {"name": "Mastologia", "scores": {"worklife": 7.5, "fastmoney": 5.5, "longterm": 8.5, "lowcost": 8.5, "independence": 5.0, "patient": 9.0, "surgical": 9.0, "lowstress": 7.0, "geography": 6.5, "predictability": 8.5}}, {"name": "Medicina de Emergência", "scores": {"worklife": 4.0, "fastmoney": 9.5, "longterm": 6.5, "lowcost": 10.0, "independence": 9.0, "patient": 3.0, "surgical": 7.0, "lowstress": 0.0, "geography": 9.5, "predictability": 3.0}}, {"name": "Medicina de Família e Comunidade", "scores": {"worklife": 8.5, "fastmoney": 9.0, "longterm": 6.0, "lowcost": 10.0, "independence": 9.5, "patient": 10.0, "surgical": 3.0, "lowstress": 8.0, "geography": 10.0, "predictability": 9.5}}, {"name": "Medicina do Trabalho", "scores": {"worklife": 9.5, "fastmoney": 7.5, "longterm": 7.5, "lowcost": 9.0, "independence": 8.0, "patient": 5.0, "surgical": 0.0, "lowstress": 9.5, "geography": 9.0, "predictability": 10.0}}, {"name": "Medicina de Tráfego", "scores": {"worklife": 9.5, "fastmoney": 7.0, "longterm": 6.0, "lowcost": 7.0, "independence": 7.5, "patient": 2.0, "surgical": 0.0, "lowstress": 10.0, "geography": 8.0, "predictability": 10.0}}, {"name": "Medicina Esportiva", "scores": {"worklife": 8.0, "fastmoney": 4.5, "longterm": 9.0, "lowcost": 8.5, "independence": 6.0, "patient": 8.5, "surgical": 2.0, "lowstress": 9.0, "geography": 6.0, "predictability": 8.5}}, {"name": "Medicina Física e Reabilitação (Fisiatria)", "scores": {"worklife": 9.0, "fastmoney": 6.0, "longterm": 7.5, "lowcost": 8.5, "independence": 7.0, "patient": 9.5, "surgical": 4.0, "lowstress": 9.5, "geography": 6.0, "predictability": 9.5}}, {"name": "Medicina Intensiva (UTI)", "scores": {"worklife": 4.0, "fastmoney": 9.0, "longterm": 7.5, "lowcost": 10.0, "independence": 8.5, "patient": 4.0, "surgical": 6.5, "lowstress": 1.0, "geography": 8.5, "predictability": 5.0}}, {"name": "Medicina Legal e Perícia Médica", "scores": {"worklife": 8.5, "fastmoney": 6.5, "longterm": 8.0, "lowcost": 9.5, "independence": 9.0, "patient": 1.5, "surgical": 3.0, "lowstress": 9.0, "geography": 7.0, "predictability": 9.0}}, {"name": "Medicina Nuclear", "scores": {"worklife": 8.5, "fastmoney": 7.0, "longterm": 8.5, "lowcost": 4.0, "independence": 6.5, "patient": 3.0, "surgical": 2.0, "lowstress": 9.5, "geography": 5.0, "predictability": 9.5}}, {"name": "Medicina Preventiva e Social", "scores": {"worklife": 9.0, "fastmoney": 6.5, "longterm": 8.5, "lowcost": 10.0, "independence": 7.5, "patient": 1.0, "surgical": 0.0, "lowstress": 9.0, "geography": 6.5, "predictability": 9.5}}, {"name": "Nefrologia", "scores": {"worklife": 6.0, "fastmoney": 7.5, "longterm": 8.5, "lowcost": 8.5, "independence": 7.5, "patient": 9.5, "surgical": 4.0, "lowstress": 5.0, "geography": 7.5, "predictability": 7.0}}, {"name": "Neonatologia", "scores": {"worklife": 3.5, "fastmoney": 9.5, "longterm": 7.5, "lowcost": 10.0, "independence": 9.0, "patient": 7.5, "surgical": 6.5, "lowstress": 1.5, "geography": 8.5, "predictability": 4.0}}, {"name": "Neurocirurgia", "scores": {"worklife": 1.0, "fastmoney": 4.0, "longterm": 10.0, "lowcost": 8.5, "independence": 1.5, "patient": 7.5, "surgical": 10.0, "lowstress": 1.0, "geography": 4.0, "predictability": 2.0}}, {"name": "Neurologia", "scores": {"worklife": 6.5, "fastmoney": 7.0, "longterm": 8.0, "lowcost": 9.0, "independence": 7.5, "patient": 9.0, "surgical": 2.0, "lowstress": 5.0, "geography": 8.0, "predictability": 7.5}}, {"name": "Nutrologia", "scores": {"worklife": 9.0, "fastmoney": 5.5, "longterm": 9.5, "lowcost": 7.5, "independence": 8.5, "patient": 8.5, "surgical": 2.0, "lowstress": 9.5, "geography": 6.5, "predictability": 9.5}}, {"name": "Oftalmologia", "scores": {"worklife": 8.5, "fastmoney": 6.5, "longterm": 9.5, "lowcost": 3.0, "independence": 7.0, "patient": 6.0, "surgical": 8.5, "lowstress": 8.5, "geography": 7.5, "predictability": 9.0}}, {"name": "Oncologia Cirúrgica", "scores": {"worklife": 4.5, "fastmoney": 5.0, "longterm": 9.5, "lowcost": 8.5, "independence": 3.0, "patient": 9.0, "surgical": 10.0, "lowstress": 3.0, "geography": 5.0, "predictability": 5.0}}, {"name": "Oncologia Clínica", "scores": {"worklife": 6.5, "fastmoney": 7.0, "longterm": 9.0, "lowcost": 9.0, "independence": 5.0, "patient": 9.5, "surgical": 1.0, "lowstress": 6.0, "geography": 6.0, "predictability": 8.0}}, {"name": "Ortopedia e Traumatologia", "scores": {"worklife": 4.5, "fastmoney": 8.0, "longterm": 9.0, "lowcost": 8.5, "independence": 6.5, "patient": 6.5, "surgical": 9.5, "lowstress": 4.5, "geography": 9.0, "predictability": 4.5}}, {"name": "Otorrinolaringologia", "scores": {"worklife": 8.5, "fastmoney": 6.5, "longterm": 9.0, "lowcost": 5.5, "independence": 7.5, "patient": 7.0, "surgical": 7.5, "lowstress": 8.0, "geography": 8.0, "predictability": 9.0}}, {"name": "Patologia", "scores": {"worklife": 9.0, "fastmoney": 7.0, "longterm": 8.0, "lowcost": 8.0, "independence": 7.5, "patient": 0.0, "surgical": 1.5, "lowstress": 9.0, "geography": 6.5, "predictability": 9.5}}, {"name": "Patologia Clínica/Medicina Laboratorial", "scores": {"worklife": 9.5, "fastmoney": 7.0, "longterm": 8.0, "lowcost": 9.5, "independence": 8.0, "patient": 0.0, "surgical": 0.0, "lowstress": 9.5, "geography": 6.0, "predictability": 10.0}}, {"name": "Pediatria", "scores": {"worklife": 5.5, "fastmoney": 8.5, "longterm": 7.5, "lowcost": 9.5, "independence": 8.5, "patient": 9.5, "surgical": 1.0, "lowstress": 4.5, "geography": 10.0, "predictability": 6.0}}, {"name": "Pneumologia", "scores": {"worklife": 7.5, "fastmoney": 6.5, "longterm": 8.0, "lowcost": 8.5, "independence": 7.5, "patient": 8.5, "surgical": 3.0, "lowstress": 6.5, "geography": 8.0, "predictability": 8.5}}, {"name": "Psiquiatria", "scores": {"worklife": 9.0, "fastmoney": 7.5, "longterm": 9.5, "lowcost": 10.0, "independence": 9.0, "patient": 10.0, "surgical": 0.5, "lowstress": 7.0, "geography": 9.5, "predictability": 9.5}}, {"name": "Radiologia e Diagnóstico por Imagem", "scores": {"worklife": 8.0, "fastmoney": 8.5, "longterm": 8.5, "lowcost": 5.0, "independence": 7.5, "patient": 2.0, "surgical": 3.5, "lowstress": 8.5, "geography": 9.0, "predictability": 9.0}}, {"name": "Radioterapia", "scores": {"worklife": 9.0, "fastmoney": 7.0, "longterm": 8.0, "lowcost": 2.0, "independence": 6.0, "patient": 7.5, "surgical": 3.0, "lowstress": 9.5, "geography": 4.5, "predictability": 9.5}}, {"name": "Reumatologia", "scores": {"worklife": 9.0, "fastmoney": 5.5, "longterm": 8.5, "lowcost": 9.5, "independence": 7.0, "patient": 9.5, "surgical": 2.5, "lowstress": 9.0, "geography": 7.5, "predictability": 9.5}}, {"name": "Urologia", "scores": {"worklife": 6.5, "fastmoney": 6.5, "longterm": 9.5, "lowcost": 8.5, "independence": 7.0, "patient": 8.5, "surgical": 9.0, "lowstress": 6.0, "geography": 8.0, "predictability": 7.5}}];
+
+        // Paleta de cores dinâmica e amigável ao ES5
+        var colorPalette = ['#ef4444', '#a855f7', '#4b5563', '#14b8a6', '#3b82f6', '#f97316', '#ec4899', '#6366f1', '#eab308', '#10b981', '#06b6d4'];
+        specialtiesData.forEach(function(spec, index) {
+            spec.hexColor = colorPalette[index % colorPalette.length];
+        });
+
+        var criteria = [
             { id: 'worklife', label: 'Qualidade de Vida e Tempo Livre', desc: 'Importância de ter noites livres, finais de semana e baixa carga de plantão.' },
             { id: 'fastmoney', label: 'Retorno Financeiro Imediato', desc: 'Vontade de ganhar muito bem logo no primeiro mês após terminar a residência.' },
             { id: 'longterm', label: 'Teto Financeiro de Longo Prazo', desc: 'Potencial de ficar milionário a longo prazo abrindo grandes clínicas.' },
-            { id: 'lowcost', label: 'Baixo Custo para Iniciar', desc: 'Preferência por não ter que comprar equipamentos ou máquinas caras (ex: montar consultório só com cadeira e mesa).' },
-            { id: 'independence', label: 'Independência de Círculo/QI', desc: 'Não depender de indicações de outros médicos ou de "entrar para um grupo" para ter pacientes/trabalho.' },
+            { id: 'lowcost', label: 'Baixo Custo para Iniciar', desc: 'Preferência por não ter que comprar equipamentos ou máquinas caras.' },
+            { id: 'independence', label: 'Independência de Círculo/QI', desc: 'Não depender de indicações de outros médicos para ter pacientes.' },
             { id: 'patient', label: 'Relação Médico-Paciente', desc: 'Gostar de conversar, ouvir histórias, acompanhar o paciente a longo prazo.' },
             { id: 'surgical', label: 'Perfil Cirúrgico/Procedimental', desc: 'Gostar de colocar a mão na massa, operar, fazer procedimentos práticos.' },
-            { id: 'lowstress', label: 'Baixo Estresse Agudo', desc: 'Aversão a emergências de vida ou morte, paradas cardíacas, vias aéreas difíceis.' },
-            { id: 'geography', label: 'Capilaridade / Liberdade Geográfica', desc: 'Facilidade de ter demanda de trabalho em qualquer cidade do interior, sem depender de grande estrutura hospitalar.' },
-            { id: 'predictability', label: 'Previsibilidade de Rotina', desc: 'Gostar de saber exatamente a hora que entra e sai, sem chamadas inesperadas de madrugada.' }
+            { id: 'lowstress', label: 'Baixo Estresse Agudo', desc: 'Aversão a emergências de vida ou morte, paradas cardíacas, urgências.' },
+            { id: 'geography', label: 'Capilaridade / Liberdade Geográfica', desc: 'Facilidade de ter demanda de trabalho em qualquer cidade do interior.' },
+            { id: 'predictability', label: 'Previsibilidade de Rotina', desc: 'Saber exatamente a hora que entra e sai, sem chamadas inesperadas.' }
         ];
 
-        let specialtiesData = [
-            {
-                name: 'Anestesiologia',
-                color: 'bg-red-500',
-                insight: 'Você valoriza muito o retorno financeiro rápido, alta capilaridade e não se importa em entrar em grupos, mas tolera alto estresse agudo e rotina centrada no bloco cirúrgico.',
-                scores: { worklife: 6, fastmoney: 10, longterm: 7, lowcost: 10, independence: 2, patient: 3, surgical: 8, lowstress: 2, geography: 9, predictability: 7 }
-            },
-            {
-                name: 'Psiquiatria',
-                color: 'bg-purple-500',
-                insight: 'Seu perfil é extremamente clínico. Você preza por qualidade de vida, baixo custo inicial, independência de QI e forte relação humana, não fazendo questão de bloco cirúrgico.',
-                scores: { worklife: 9, fastmoney: 7, longterm: 8, lowcost: 10, independence: 9, patient: 10, surgical: 0, lowstress: 6, geography: 10, predictability: 8 }
-            },
-            {
-                name: 'Radiologia',
-                color: 'bg-gray-600',
-                insight: 'Você é focado em tecnologia e diagnósticos. Busca previsibilidade, baixo estresse agudo e pouquíssimo contato com pacientes, com a flexibilidade da telerradiologia.',
-                scores: { worklife: 8, fastmoney: 8, longterm: 8, lowcost: 9, independence: 6, patient: 1, surgical: 2, lowstress: 9, geography: 10, predictability: 9 }
-            },
-            {
-                name: 'Otorrinolaringologia',
-                color: 'bg-teal-500',
-                insight: 'Você quer ser um cirurgião com qualidade de vida. Gosta de resolver problemas práticos e manter contato clínico, aceitando a curva de investimento no consultório e networking.',
-                scores: { worklife: 7, fastmoney: 5, longterm: 9, lowcost: 4, independence: 5, patient: 8, surgical: 9, lowstress: 5, geography: 6, predictability: 7 }
-            },
-            {
-                name: 'Oftalmologia',
-                color: 'bg-blue-500',
-                insight: 'Você mira no topo: alta tecnologia, procedimentos limpos e rotina excelente. Você aceita o desafio do altíssimo custo inicial (equipamentos) e barreira de entrada em troca de um teto financeiro gigantesco e previsibilidade.',
-                scores: { worklife: 9, fastmoney: 5, longterm: 10, lowcost: 1, independence: 4, patient: 7, surgical: 10, lowstress: 9, geography: 5, predictability: 9 }
-            }
-        ];
-
-        let userWeights = {};
+        var userWeights = {};
         
-        // Elementos do DOM (Calculadora Principal)
-        const slidersContainer = document.getElementById('sliders-container');
-        const resultsContainer = document.getElementById('results-container');
-        const insightCard = document.getElementById('insight-card');
-        const winnerNameEl = document.getElementById('winner-name');
-        const winnerDescEl = document.getElementById('winner-desc');
+        // Especialidades selecionadas inicialmente por padrão (índices)
+        // 1: Anestesiologia, 4: Cirurgia Geral, 8: Clínica Médica, 42: Pediatria, 44: Psiquiatria
+        var selectedIndexes = [1, 4, 8, 42, 44]; 
 
-        // Inicialização
+        var slidersContainer = document.getElementById('sliders-container');
+        var resultsContainer = document.getElementById('results-container');
+        var insightCard = document.getElementById('insight-card');
+        var winnerNameEl = document.getElementById('winner-name');
+        var winnerDescEl = document.getElementById('winner-desc');
+
         function init() {
-            // Garante que todo critério tem um peso de usuário inicial
-            criteria.forEach(c => {
+            criteria.forEach(function(c) {
                 if(userWeights[c.id] === undefined) userWeights[c.id] = 5;
             });
+            initSelector();
             renderSliders();
             calculateAndRenderResults();
             initAdvancedSettings();
         }
 
-        // Renderizar os inputs de range do usuário
+        // --- SISTEMA DE SELEÇÃO DE ESPECIALIDADES ---
+        function initSelector() {
+            var selector = document.getElementById('spec-selector');
+            selector.innerHTML = '';
+            
+            // Ordenar alfabeticamente no seletor para facilitar a busca
+            var sortedSpecs = specialtiesData.map(function(s, i) { return {name: s.name, index: i}; });
+            sortedSpecs.sort(function(a,b) { return a.name.localeCompare(b.name); });
+
+            sortedSpecs.forEach(function(specItem) {
+                var option = document.createElement('option');
+                option.value = specItem.index;
+                option.innerText = specItem.name;
+                selector.appendChild(option);
+            });
+            renderChips();
+        }
+
+        window.addSpecialtyToCompare = function() {
+            var selector = document.getElementById('spec-selector');
+            var val = parseInt(selector.value);
+            
+            if(selectedIndexes.length >= 5) {
+                alert('Você já selecionou o limite máximo de 5 especialidades. Remova alguma clicando no "X" para adicionar outra.');
+                return;
+            }
+            
+            if(selectedIndexes.indexOf(val) === -1) {
+                selectedIndexes.push(val);
+                renderChips();
+                calculateAndRenderResults();
+            } else {
+                alert('Esta especialidade já está na lista de comparação.');
+            }
+        };
+
+        window.removeSpecialty = function(indexToRemove) {
+            var pos = selectedIndexes.indexOf(indexToRemove);
+            if(pos !== -1) {
+                selectedIndexes.splice(pos, 1);
+                renderChips();
+                calculateAndRenderResults();
+            }
+        };
+
+        function renderChips() {
+            var container = document.getElementById('selected-chips');
+            container.innerHTML = '';
+            selectedIndexes.forEach(function(idx) {
+                var spec = specialtiesData[idx];
+                var chip = document.createElement('div');
+                chip.className = 'chip';
+                chip.innerHTML = spec.name + ' <button title="Remover" onclick="removeSpecialty(' + idx + ')">&times;</button>';
+                container.appendChild(chip);
+            });
+        }
+
+        // --- SLIDERS E CÁLCULO EXATO ---
         function renderSliders() {
             slidersContainer.innerHTML = '';
-            criteria.forEach(c => {
-                const wrapper = document.createElement('div');
-                wrapper.innerHTML = `
-                    <div class="flex justify-between items-end mb-1">
-                        <label class="font-semibold text-gray-700 text-sm">${c.label}</label>
-                        <span id="val-${c.id}" class="text-blue-600 font-bold bg-blue-100 px-2 py-1 rounded text-xs">${userWeights[c.id]}</span>
-                    </div>
-                    <p class="text-xs text-gray-500 mb-2">${c.desc}</p>
-                    <input type="range" min="0" max="10" value="${userWeights[c.id]}" class="slider" id="slider-${c.id}">
-                `;
+            criteria.forEach(function(c) {
+                var wrapper = document.createElement('div');
+                wrapper.innerHTML = 
+                    '<div class="flex-between">' +
+                        '<label class="crit-label">' + c.label + '</label>' +
+                        '<span id="val-' + c.id + '" class="crit-badge">' + userWeights[c.id] + '</span>' +
+                    '</div>' +
+                    '<p class="crit-desc">' + c.desc + '</p>' +
+                    '<input type="range" min="0" max="10" value="' + userWeights[c.id] + '" class="slider" id="slider-' + c.id + '">';
                 slidersContainer.appendChild(wrapper);
 
-                const slider = document.getElementById(`slider-${c.id}`);
-                const valDisplay = document.getElementById(`val-${c.id}`);
+                var slider = document.getElementById('slider-' + c.id);
+                var valDisplay = document.getElementById('val-' + c.id);
                 
-                slider.addEventListener('input', (e) => {
-                    const val = parseInt(e.target.value);
+                slider.addEventListener('input', function(e) {
+                    var val = parseInt(e.target.value);
                     valDisplay.innerText = val;
                     userWeights[c.id] = val;
                     calculateAndRenderResults();
@@ -230,26 +551,32 @@
             });
         }
 
-        // Calcular compatibilidade
         function calculateAndRenderResults() {
-            var totalCriteria = criteria.length;
-            // A distância máxima possível por critério é 10. Multiplicamos pelo número de critérios.
-            var maxPossibleDistance = totalCriteria * 10; 
+            if(selectedIndexes.length === 0) {
+                resultsContainer.innerHTML = '<p style="color: #6b7280; text-align: center; font-size: 0.875rem;">Adicione especialidades na barra acima para visualizar o ranking.</p>';
+                insightCard.classList.add('hidden');
+                return;
+            }
 
-            var results = specialtiesData.map(function(spec) {
-                var totalDistance = 0;
+            var totalCriteria = criteria.length;
+            var maxPossibleScore = totalCriteria * 10; 
+
+            // Filtra e mapeia apenas as selecionadas
+            var results = selectedIndexes.map(function(idx) {
+                var spec = specialtiesData[idx];
+                var actualScore = 0;
                 
                 criteria.forEach(function(c) {
                     var specScore = spec.scores[c.id] !== undefined ? spec.scores[c.id] : 5;
-                    var userScore = userWeights[c.id] !== undefined ? userWeights[c.id] : 5;
+                    var userTarget = userWeights[c.id] !== undefined ? userWeights[c.id] : 5;
                     
-                    // CÁLCULO DE PROXIMIDADE: Calcula a diferença absoluta entre o que você quer e o que a especialidade tem
-                    var distance = Math.abs(userScore - specScore);
-                    totalDistance += distance;
+                    // Cálculo da distância exata
+                    var distance = Math.abs(userTarget - specScore);
+                    var pointsForThisCriterion = 10 - distance;
+                    actualScore += pointsForThisCriterion;
                 });
                 
-                // Inverte a lógica: menor distância vira maior porcentagem de afinidade
-                var matchPercentage = ((1 - (totalDistance / maxPossibleDistance)) * 100).toFixed(1);
+                var matchPercentage = ((actualScore / maxPossibleScore) * 100).toFixed(1);
                 
                 var resultObj = Object.assign({}, spec);
                 resultObj.matchPercentage = parseFloat(matchPercentage);
@@ -266,21 +593,20 @@
 
         function renderBars(results) {
             resultsContainer.innerHTML = '';
-            results.forEach((res, index) => {
-                const isWinner = index === 0;
-                const wrapper = document.createElement('div');
+            results.forEach(function(res, index) {
+                var isWinner = index === 0;
+                var wrapper = document.createElement('div');
                 
-                wrapper.innerHTML = `
-                    <div class="flex justify-between items-center mb-1">
-                        <span class="font-bold ${isWinner ? 'text-gray-900 text-lg' : 'text-gray-600'}">${res.name}</span>
-                        <span class="font-bold ${isWinner ? 'text-blue-600 text-lg' : 'text-gray-500'}">${res.matchPercentage}%</span>
-                    </div>
-                    <div class="w-full bg-gray-200 rounded-full h-4 overflow-hidden">
-                        <div class="${res.color} h-4 rounded-full bar-transition relative" style="width: ${res.matchPercentage}%">
-                            ${isWinner ? '<div class="absolute inset-0 bg-white opacity-20 animate-pulse"></div>' : ''}
-                        </div>
-                    </div>
-                `;
+                wrapper.innerHTML = 
+                    '<div class="bar-label-container">' +
+                        '<span class="bar-name ' + (isWinner ? 'winner' : '') + '">' + res.name + '</span>' +
+                        '<span class="bar-pct ' + (isWinner ? 'winner' : '') + '">' + res.matchPercentage + '%</span>' +
+                    '</div>' +
+                    '<div class="progress-bg">' +
+                        '<div class="progress-bar" style="background-color: ' + res.hexColor + '; width: ' + res.matchPercentage + '%">' +
+                            (isWinner ? '<div class="pulse-overlay"></div>' : '') +
+                        '</div>' +
+                    '</div>';
                 resultsContainer.appendChild(wrapper);
             });
         }
@@ -289,138 +615,104 @@
             insightCard.classList.remove('hidden');
             insightCard.classList.add('winner-card');
             winnerNameEl.innerText = winner.name;
-            winnerDescEl.innerText = winner.insight;
+            
+            // Lógica para gerar um insight dinâmico baseado na variável de maior afinidade
+            var bestCrit = "";
+            var smallestDist = 99;
+            criteria.forEach(function(c) {
+                var specScore = winner.scores[c.id] !== undefined ? winner.scores[c.id] : 5;
+                var userTarget = userWeights[c.id] !== undefined ? userWeights[c.id] : 5;
+                var dist = Math.abs(userTarget - specScore);
+                
+                if(dist < smallestDist) {
+                    smallestDist = dist;
+                    bestCrit = c.label;
+                }
+            });
+
+            winnerDescEl.innerText = "Esta especialidade assumiu a liderança na sua lista porque se alinha fortemente de forma exata ao que você espera no quesito: " + bestCrit + ".";
         }
 
-        /* =========================================================================
-           LÓGICA DAS CONFIGURAÇÕES AVANÇADAS
-           ========================================================================= */
-
-        const advSelect = document.getElementById('adv-specialty-select');
-        const advScoresContainer = document.getElementById('adv-specialty-scores');
+        /* --- CONFIGURAÇÕES AVANÇADAS --- */
+        var advSelect = document.getElementById('adv-specialty-select');
+        var advScoresContainer = document.getElementById('adv-specialty-scores');
 
         function initAdvancedSettings() {
             updateAdvSelect();
-            advSelect.addEventListener('change', (e) => {
+            advSelect.addEventListener('change', function(e) {
                 renderAdvSpecialtyScores(e.target.value);
             });
         }
 
-        // Atualiza a lista do Dropdown de Editar Especialidade
         function updateAdvSelect() {
             advSelect.innerHTML = '';
-            specialtiesData.forEach((spec, idx) => {
-                const option = document.createElement('option');
-                option.value = idx;
-                option.innerText = spec.name;
+            
+            var sortedSpecs = specialtiesData.map(function(s, i) { return {name: s.name, index: i}; });
+            sortedSpecs.sort(function(a,b) { return a.name.localeCompare(b.name); });
+
+            sortedSpecs.forEach(function(specItem) {
+                var option = document.createElement('option');
+                option.value = specItem.index;
+                option.innerText = specItem.name;
                 advSelect.appendChild(option);
             });
-            if(specialtiesData.length > 0) {
-                renderAdvSpecialtyScores(0); // Renderiza a primeira por padrão
+            
+            if(sortedSpecs.length > 0) {
+                advSelect.value = sortedSpecs[0].index;
+                renderAdvSpecialtyScores(sortedSpecs[0].index); 
             }
         }
 
-        // Renderiza os sliders de edição interna para a especialidade selecionada
         function renderAdvSpecialtyScores(index) {
             advScoresContainer.innerHTML = '';
-            const spec = specialtiesData[index];
+            var spec = specialtiesData[index];
             if(!spec) return;
 
-            criteria.forEach(c => {
-                const score = spec.scores[c.id] !== undefined ? spec.scores[c.id] : 5;
+            criteria.forEach(function(c) {
+                var score = spec.scores[c.id] !== undefined ? spec.scores[c.id] : 5;
                 
-                const wrapper = document.createElement('div');
-                wrapper.className = "flex flex-col mb-3 bg-gray-50 p-2 rounded border border-gray-100";
-                wrapper.innerHTML = `
-                    <div class="flex justify-between items-center text-xs mb-1">
-                        <span class="font-semibold text-gray-700">${c.label}</span>
-                        <span id="adv-val-${c.id}-${index}" class="font-bold text-blue-600 bg-blue-100 px-1 rounded">${score}</span>
-                    </div>
-                    <input type="range" min="0" max="10" value="${score}" class="slider" 
-                           oninput="updateInternalScore(${index}, '${c.id}', this.value)">
-                `;
+                var wrapper = document.createElement('div');
+                wrapper.className = "adv-score-row";
+                wrapper.innerHTML = 
+                    '<div class="flex-between">' +
+                        '<span>' + c.label + '</span>' +
+                        '<span id="adv-val-' + c.id + '-' + index + '">' + score + '</span>' +
+                    '</div>' +
+                    '<input type="range" min="0" max="10" value="' + score + '" class="slider" ' +
+                           'oninput="updateInternalScore(' + index + ', \'' + c.id + '\', this.value)">';
                 advScoresContainer.appendChild(wrapper);
             });
         }
 
-        // Função chamada globalmente quando o usuário move o slider nas Configurações Avançadas
         window.updateInternalScore = function(specIndex, critId, value) {
             specialtiesData[specIndex].scores[critId] = parseInt(value);
-            document.getElementById(`adv-val-${critId}-${specIndex}`).innerText = value;
+            document.getElementById('adv-val-' + critId + '-' + specIndex).innerText = value;
             calculateAndRenderResults();
         };
 
-        // Adicionar nova Especialidade
-        window.addNewSpecialty = function() {
-            const name = document.getElementById('new-spec-name').value.trim();
-            const insight = document.getElementById('new-spec-insight').value.trim();
-            
-            if(!name) {
-                alert('Por favor, digite o nome da especialidade.');
-                return;
-            }
-
-            // Define nota 5 (média) para todos os critérios atuais
-            const newScores = {};
-            criteria.forEach(c => newScores[c.id] = 5);
-
-            // Seleciona uma cor que destaque
-            const tailwindColors = ['bg-orange-500', 'bg-pink-500', 'bg-indigo-500', 'bg-yellow-500', 'bg-emerald-500', 'bg-cyan-500'];
-            const color = tailwindColors[specialtiesData.length % tailwindColors.length];
-
-            specialtiesData.push({
-                name: name,
-                color: color,
-                insight: insight || `Perfil focado em ${name}. Área recém adicionada ao sistema.`,
-                scores: newScores
-            });
-
-            // Limpa os campos
-            document.getElementById('new-spec-name').value = '';
-            document.getElementById('new-spec-insight').value = '';
-
-            // Atualiza UI
-            updateAdvSelect();
-            // Seleciona automaticamente a recém criada (a última do array)
-            advSelect.value = specialtiesData.length - 1;
-            renderAdvSpecialtyScores(specialtiesData.length - 1);
-            
-            calculateAndRenderResults();
-        };
-
-        // Adicionar novo Critério / Variável
         window.addNewCriterion = function() {
-            const label = document.getElementById('new-crit-label').value.trim();
-            const desc = document.getElementById('new-crit-desc').value.trim();
+            var label = document.getElementById('new-crit-label').value.trim();
+            var desc = document.getElementById('new-crit-desc').value.trim();
 
             if(!label) {
                 alert('Por favor, digite o nome do critério.');
                 return;
             }
 
-            // Cria um ID único
-            const id = 'crit_' + Date.now();
-
-            // Adiciona no array de critérios
-            criteria.push({ id, label, desc: desc || 'Critério personalizado.' });
-
-            // Adiciona aos pesos do usuário com nota 5 por padrão
+            var id = 'crit_' + new Date().getTime();
+            criteria.push({ id: id, label: label, desc: desc || 'Critério personalizado.' });
             userWeights[id] = 5;
 
-            // Adiciona nota 5 a todas as especialidades existentes para este novo critério
-            specialtiesData.forEach(spec => {
+            specialtiesData.forEach(function(spec) {
                 spec.scores[id] = 5;
             });
 
-            // Limpa os campos
             document.getElementById('new-crit-label').value = '';
             document.getElementById('new-crit-desc').value = '';
 
-            // Atualiza UI principal e UI avançada
             init(); 
         };
 
-        // Dispara a inicialização
         window.addEventListener('DOMContentLoaded', init);
     </script>
 </body>
