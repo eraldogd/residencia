@@ -232,30 +232,33 @@
 
         // Calcular compatibilidade
         function calculateAndRenderResults() {
-            let maxPossibleScore = 0;
-            criteria.forEach(c => {
-                maxPossibleScore += (userWeights[c.id] * 10); 
-            });
+            var totalCriteria = criteria.length;
+            // A distância máxima possível por critério é 10. Multiplicamos pelo número de critérios.
+            var maxPossibleDistance = totalCriteria * 10; 
 
-            if (maxPossibleScore === 0) maxPossibleScore = 1;
-
-            let results = specialtiesData.map(spec => {
-                let actualScore = 0;
-                criteria.forEach(c => {
-                    // Prevenção caso uma especialidade recém-adicionada não tenha score para um novo critério
-                    const specScore = spec.scores[c.id] !== undefined ? spec.scores[c.id] : 5;
-                    actualScore += (userWeights[c.id] * specScore);
+            var results = specialtiesData.map(function(spec) {
+                var totalDistance = 0;
+                
+                criteria.forEach(function(c) {
+                    var specScore = spec.scores[c.id] !== undefined ? spec.scores[c.id] : 5;
+                    var userScore = userWeights[c.id] !== undefined ? userWeights[c.id] : 5;
+                    
+                    // CÁLCULO DE PROXIMIDADE: Calcula a diferença absoluta entre o que você quer e o que a especialidade tem
+                    var distance = Math.abs(userScore - specScore);
+                    totalDistance += distance;
                 });
                 
-                let matchPercentage = ((actualScore / maxPossibleScore) * 100).toFixed(1);
+                // Inverte a lógica: menor distância vira maior porcentagem de afinidade
+                var matchPercentage = ((1 - (totalDistance / maxPossibleDistance)) * 100).toFixed(1);
                 
-                return {
-                    ...spec,
-                    matchPercentage: parseFloat(matchPercentage)
-                };
+                var resultObj = Object.assign({}, spec);
+                resultObj.matchPercentage = parseFloat(matchPercentage);
+                return resultObj;
             });
 
-            results.sort((a, b) => b.matchPercentage - a.matchPercentage);
+            results.sort(function(a, b) {
+                return b.matchPercentage - a.matchPercentage;
+            });
 
             renderBars(results);
             if(results.length > 0) updateInsight(results[0]);
